@@ -1,0 +1,28 @@
+CONTROL_MATCHING:
+
+  # Treatment pixels
+  TREATMENT_PIXELS:
+    N_MIN: 5
+    N_MAX: 30
+
+  SAMPLE_SCALE: 20
+  N_SELECTED_DONOR_PIXELS_PER_TREATMENT: 5
+
+  BUFFER_AROUND_OTHER_PROJECTS_M: 50
+
+  SPILLOVER_EXCLUDE:
+    MIN: 500 # 500 m
+    MAX: 5000 # 5 km
+
+  INCLUSION_BUFFER:
+    MIN: 10000 # 10 km
+    MAX: 50000 # 50 km
+
+  # Human modification matching
+  HMI_MAX_DELTA: 0.10
+
+  # AlphaEarth matching
+  AEF_MAX_DELTA: 0.1
+
+  # Disturbance matching: year difference
+  DISTURBANCE_TOLERANCE: 1

@@ -1,0 +1,17 @@
+[project]
+name = "restoration-counterfactuals"
+version = "0.1.0"
+description = "Single-site restoration matching and ridge synthetic controls"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "earthengine-api>=1.7.46", "geemap>=0.36", "numpy>=1.26", "pandas>=2.2",
+  "matplotlib>=3.8", "PyYAML>=6", "quadprog>=0.1.13", "loguru>=0.7.3",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = ["ipykernel>=6", "nbformat>=5", "pytest>=8"]
