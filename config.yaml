@@ -1,28 +1,56 @@
+# Settings for sampling treatment locations and finding comparable donor pixels.
+# All matching criteria must pass for a donor to be eligible.
 CONTROL_MATCHING:
 
-  # Treatment pixels
+  # Requested number of treatment samples inside the project boundary.
+  # Count scales with sqrt(project area): N_MIN at <= 1 ha, N_MAX at >= 1000 ha,
+  # interpolated between those areas and truncated to an integer.
+  # Actual samples may be fewer where matching layers have missing data.
   TREATMENT_PIXELS:
     N_MIN: 5
     N_MAX: 30
 
+  # Earth Engine sampling scale in metres, for treatment and donor locations.
+  # A smaller scale gives a finer sampling grid, not finer source data.
   SAMPLE_SCALE: 20
+
+  # Requested donors per treatment sample; fewer may be available.
+  # Donors are sampled randomly among eligible pixels, then duplicate locations
+  # across treatment samples are removed. Increasing this expands the donor pool.
   N_SELECTED_DONOR_PIXELS_PER_TREATMENT: 5
 
+  # Exclude supplied neighboring project polygons plus this buffer (metres).
+  # Has no effect when the supplied other-project collection is empty.
   BUFFER_AROUND_OTHER_PROJECTS_M: 50
 
+  # Inner exclusion distance from the project boundary (metres), to limit spillover.
+  # Scales with sqrt(project area): MIN at <= 1 ha, MAX at >= 1000 ha.
+  # Increasing these distances excludes more nearby potential donors.
   SPILLOVER_EXCLUDE:
-    MIN: 500 # 500 m
-    MAX: 5000 # 5 km
+    MIN: 500   # 0.5 km
+    MAX: 5000  # 5 km
 
+  # Outer donor-search distance from the project boundary (metres).
+  # Uses the same area scaling as SPILLOVER_EXCLUDE; keep it larger than that
+  # exclusion distance. Increasing it searches farther away for eligible donors.
   INCLUSION_BUFFER:
-    MIN: 10000 # 10 km
-    MAX: 50000 # 50 km
+    MIN: 10000  # 10 km
+    MAX: 50000  # 50 km
 
-  # Human modification matching
+  # Maximum absolute difference in pre-intervention human-modification score.
+  # In score units, not a percentage: 0.10 allows a difference of up to 0.10.
+  # Smaller values require more similar human pressure; larger values allow more donors.
   HMI_MAX_DELTA: 0.10
 
-  # AlphaEarth matching
+  # Maximum AlphaEarth embedding distance: 1 - dot(treatment, donor).
+  # Dimensionless; smaller values require more similar embeddings.
+  # Used for interventions >= 2018, with embeddings from the previous year.
+  # Earlier interventions require the same remapped GLAD land-cover class instead,
+  # so changing this threshold has no effect for those interventions.
   AEF_MAX_DELTA: 0.1
 
-  # Disturbance matching: year difference
+  # Maximum difference in recorded forest-loss year, in years (1 means +/- 1 year).
+  # For treatment pixels with pre-intervention loss, donors must also have loss
+  # before intervention. Otherwise donors must have no recorded pre-intervention
+  # loss; this tolerance does not apply to that branch. Larger values relax matching.
   DISTURBANCE_TOLERANCE: 1

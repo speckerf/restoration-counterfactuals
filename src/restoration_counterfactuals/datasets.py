@@ -1,5 +1,27 @@
+import json
+from pathlib import Path
+
 import ee
 from loguru import logger
+
+
+def load_example(name: str, path_rel=".") -> ee.Feature:
+    """Load example from example folder"""
+    assert name in [
+        "bom_futuro",
+        "campeche_mexico",
+        "finca_rinconada",
+        "reforest_now_au",
+    ]
+    site_path = Path(path_rel, "examples", f"{name}.geojson")
+
+    site_json = json.loads(site_path.read_text())
+    if len(site_json["features"]) != 1:
+        raise ValueError("Provide exactly one project boundary.")
+    site_feature = site_json["features"][0]
+    assert "intervention_year" in site_feature["properties"]
+    site = ee.Feature(site_feature)
+    return site
 
 
 def load_alpha_earth(year: int, bounds: ee.Geometry) -> ee.Image:
@@ -155,7 +177,9 @@ def load_svh_imgc() -> tuple[ee.ImageCollection, ee.Projection]:
     imgc = ee.ImageCollection(path)
 
     # scale by 0.1:
-    imgc = imgc.map(lambda img: img.multiply(0.1).copyProperties(img, img.propertyNames()))
+    imgc = imgc.map(
+        lambda img: img.multiply(0.1).copyProperties(img, img.propertyNames())
+    )
 
     projection = imgc.first().projection()
     return imgc, projection
