@@ -2,6 +2,8 @@
 
 Explore restoration impacts for a single project using Google Earth Engine data. The notebook selects comparable donor pixels and fits separate synthetic controls for above-ground biomass (AGB) and short vegetation height (SVH), then plots observed outcomes against the estimated counterfactual.
 
+![Short vegetation height: observed restoration site, synthetic control, donor trajectories, and estimated effect](outputs/svh_impacts_w_donor.png)
+
 ## Get started
 
 With [uv](https://docs.astral.sh/uv/) installed:
